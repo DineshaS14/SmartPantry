@@ -28,7 +28,7 @@ export const authenticate = async (
     };
     req.user = { userId: decoded.userId };
     next(); // Proceed to the next middleware or request handler
-  } catch (error) {
+  } catch {
     res.status(401).json({ success: false, message: 'Invalid token' });
   }
 };
