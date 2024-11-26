@@ -26,8 +26,18 @@ const LoginPage = () => {
       const data = await response.json();
 
       if (response.ok) {
+        // Set user as logged in
         authContext?.setIsLoggedIn(true);
-        localStorage.setItem('token', data.token); // Optionally store token
+
+        // Store token if needed
+        localStorage.setItem('token', data.token); 
+
+        // Set user details in the context, including ID and username
+        if (data.user) {
+          authContext?.setUser({ id: data.user.id, username: data.user.username });
+        }
+
+        // Redirect to homepage
         router.push('/');
       } else {
         setError(data.message || 'Login failed');

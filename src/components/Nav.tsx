@@ -16,31 +16,42 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-[#0A3981] shadow-md sticky ">
-      <div className="w-full  px-2 sm:px-6 lg:px-8">
+    <header className="bg-[#0A3981] sticky">
+      <div className="w-full px-2 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div className="flex flex-row items-start">
-          <Image 
-            className='shadow-[#E38E49] drop-shadow-lg'
-            src='/images/TeamLogo.PNG' 
-            alt='Team Logo' 
-            width={80} 
-            height={50} 
-        />
+            <Image
+              className="drop-shadow-[0_5px_5px_rgba(227,142,73,1)]"
+              src="/images/TeamLogo.PNG"
+              alt="Team Logo"
+              width={80}
+              height={50}
+            />
 
-            <h1 className="text-[#E38E49] text-2xl font-bold">
+            <h1 className="text-[#E38E49] text-2xl italic font-bold drop-shadow-[0_5px_10px_rgba(0,0,0,1)]">
               <Link href="/">SmartPantry</Link>
             </h1>
           </div>
           <nav className="flex space-x-4">
-            <Link href="/" className="text-[#E38E49] hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">
-              Home
+            <Link
+              href="/"
+              className="bg-[#E38E49] text-white hover:bg-[#1F509A] px-3 py-2 rounded-md text-sm font-medium border-2 border-black"
+            >
+              <span className="drop-shadow-[0_0px_5px_rgba(0,0,0,1)]">Home</span>
             </Link>
             {authContext?.isLoggedIn ? (
               <>
-                <Link href="/add-food" className="text-[#E38E49] hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">
-                  Add Food
+                <Link
+                  href="/add-food"
+                  className="bg-[#E38E49] text-white hover:bg-[#1F509A] px-3 py-2 rounded-md text-sm font-medium border-2 border-black"
+                >
+                  <span className="drop-shadow-[0_0px_5px_rgba(0,0,0,1)]">
+                    Add an Item
+                  </span>
                 </Link>
+                <span className="text-white px-3 py-2 text-sm font-medium">
+                  Hello, {authContext.user?.username}
+                </span>
                 <button
                   onClick={handleLogout}
                   className="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium"
@@ -50,11 +61,17 @@ const Header = () => {
               </>
             ) : (
               <>
-                <Link href="/login" className="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">
-                  Login
+                <Link
+                  href="/login"
+                  className="bg-[#E38E49] text-white hover:bg-[#1F509A] px-3 py-2 rounded-md text-sm font-medium border-2 border-black"
+                >
+                  <span className="drop-shadow-[0_0px_5px_rgba(0,0,0,1)]">Login</span>
                 </Link>
-                <Link href="/signup" className="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">
-                  Signup
+                <Link
+                  href="/signup"
+                  className="bg-[#E38E49] text-white hover:bg-[#1F509A] px-3 py-2 rounded-md text-sm font-medium border-2 border-black"
+                >
+                  <span className="drop-shadow-[0_0px_5px_rgba(0,0,0,1)]">SignUp</span>
                 </Link>
               </>
             )}

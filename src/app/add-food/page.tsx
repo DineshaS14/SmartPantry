@@ -9,7 +9,7 @@ import AuthContext from '../../context/AuthContext';
 const AddFoodPage = () => {
   const authContext = useContext(AuthContext);
   const router = useRouter();
-
+  
   if (!authContext?.isLoggedIn) {
     if (typeof window !== 'undefined') {
       router.push('/login');
@@ -20,7 +20,7 @@ const AddFoodPage = () => {
   return (
     <>
       
-      <main className="flex justify-center items-center min-h-screen bg-gray-100">
+      <main className="flex justify-center items-center min-h-screen bg-[#D4EBF8]">
         <AddFoodItem />
       </main>
   

@@ -1,7 +1,6 @@
 // src/app/layout.tsx
 import './globals.css';
 import { AuthProvider } from '../context/AuthContext';
-import { FoodItemsProvider } from '../context/FoodItemsContext';
 import Header from '@/components/Nav';
 import Footer from '@/components/Footer';
 
@@ -20,7 +19,7 @@ export default function RootLayout({
       <body>
         <AuthProvider>
         <Header/>
-          <FoodItemsProvider>{children}</FoodItemsProvider>
+        {children}
         </AuthProvider>
         <Footer />
       </body>

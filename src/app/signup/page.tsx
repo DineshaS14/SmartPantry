@@ -29,6 +29,7 @@ const SignupPage = () => {
 
       if (response.ok) {
         authContext?.setIsLoggedIn(true);
+        
         router.push('/');
       } else {
         setError(data.message || 'Signup failed');

@@ -7,25 +7,28 @@ export interface AuthenticatedRequest extends NextApiRequest {
   };
 }
 
+// Middleware to authenticate the user by checking for a JWT token in the request cookies
 export const authenticate = (
   req: AuthenticatedRequest,
-  res: NextApiResponse
-): boolean => {
-  const token = req.cookies?.token; // Ensure the token exists
+  res: NextApiResponse,
+  next: () => void
+) => {
+  const token = req.cookies?.token;
+
+  // Check if token exists
   if (!token) {
     res.status(401).json({ success: false, message: 'Authentication required' });
-    return false;
+    return;
   }
 
   try {
-    // Decode the token and attach user info to the request
+    // Verify the token and attach the decoded user to the request
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret') as {
       userId: string;
     };
     req.user = { userId: decoded.userId };
-    return true;
+    next(); // Proceed to the next middleware or request handler
   } catch (error) {
     res.status(401).json({ success: false, message: 'Invalid token' });
-    return false;
   }
 };

@@ -1,56 +1,58 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
-// Define the interface for an Item document
 export interface IItem extends Document {
-  title: string; // Name of the item (mandatory)
-  quantity: number; // Quantity of the item (mandatory)
-  url?: string; // Optional URL for an image or resource about the item
-  description?: string; // Optional description of the item
-  type?: string; // Optional type/category of the item
-  expiryDate: string; // Expiration date of the item as a string (mandatory)
+  title: string;
+  quantity: number;
+  url?: string;
+  description?: string;
+  type?: string;
+  expiryDate: string;
+  owner: mongoose.Types.ObjectId; // Reference to the user who owns this item
+  createdAt: Date; // Automatically generated timestamp when the item is created
+  updatedAt: Date; // Automatically updated timestamp when the item is updated
+
 }
 
-// Define the schema for the Item collection
-const ItemSchema = new mongoose.Schema<IItem>({
-  // Title field
-  title: {
-    type: String, // Data type is String
-    required: [true, 'Please provide a title for the item'], // Field is mandatory
-    trim: true, // Removes leading and trailing whitespace
+const ItemSchema = new Schema<IItem>(
+  {
+    title: {
+      type: String,
+      required: [true, 'Please provide a title for the item'],
+      trim: true,
+    },
+    quantity: {
+      type: Number,
+      required: [true, 'Please provide the quantity of the item'],
+      min: [1, 'Quantity must be at least 1'],
+    },
+    url: {
+        type: String,
+        trim: true,
+        // Optionally remove validation altogether to avoid errors
+    },
+    description: {
+      type: String,
+      trim: true,
+    },
+    type: {
+      type: String,
+      trim: true,
+    },
+    expiryDate: {
+      type: String,
+      required: [true, 'Please provide an expiry date for the item'],
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
   },
-  // Quantity field
-  quantity: {
-    type: Number, // Data type is Number
-    required: [true, 'Please provide the quantity of the item'], // Field is mandatory
-    min: [1, 'Quantity must be at least 1'], // Minimum value is 1
-  },
-  // URL field (optional)
-  url: {
-    type: String, // Data type is String
-    match: [
-      /^(https?:\/\/)?([\w.-]+)+(:\d+)?(\/[\w.-]*)*\/?$/, // Regex for valid URLs
-      'Please provide a valid URL',
-    ],
-  },
-  // Description field (optional)
-  description: {
-    type: String, // Data type is String
-    trim: true, // Removes leading and trailing whitespace
-  },
-  // Type field (optional)
-  type: {
-    type: String, // Data type is String
-    trim: true, // Removes leading and trailing whitespace
-  },
-  // Expiry Date field
-  expiryDate: {
-    type: String, // Data type is String
-    required: [true, 'Please provide an expiry date for the item'], // Field is mandatory
-  },
-});
+  {
+    timestamps: true, // Automatically adds createdAt and updatedAt fields
+  }
+);
 
-// Prevent model recompilation errors in development
-const Item: Model<IItem> =
-  mongoose.models.Item || mongoose.model<IItem>('Item', ItemSchema);
+const Item: Model<IItem> = mongoose.models.Item || mongoose.model<IItem>('Item', ItemSchema);
 
 export default Item;

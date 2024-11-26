@@ -1,12 +1,7 @@
-// src/pages/api/auth/signup.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import dbConnect from '../../../utils/dbConnect';
-import User, { IUser } from '../../../models/User';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import * as cookie from 'cookie';
-
-
+import User from '../../../models/User'; // Adjust the import path as needed
+import dbConnect from '../../../utils/dbConnect';
 
 interface SignupRequest extends NextApiRequest {
   body: {
@@ -16,79 +11,112 @@ interface SignupRequest extends NextApiRequest {
   };
 }
 
+interface SignupResponse {
+  success: boolean;
+  message?: string;
+  data?: {
+    id: string;
+    username: string;
+    email: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+}
+
 export default async function handler(
   req: SignupRequest,
-  res: NextApiResponse
+  res: NextApiResponse<SignupResponse>
 ) {
   const { method } = req;
 
+  // Connect to the database
   await dbConnect();
 
   switch (method) {
-    case 'POST':
+    case 'POST': {
       try {
         const { username, email, password } = req.body;
 
-        // Check if user already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-          return res
-            .status(400)
-            .json({ success: false, message: 'Email already in use' });
+        // Validate input fields
+        if (!username || !email || !password) {
+          return res.status(400).json({
+            success: false,
+            message: 'Please provide all required fields: username, email, and password',
+          });
         }
 
-        // Hash password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        // Validate email format
+        const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+        if (!emailRegex.test(email)) {
+          return res.status(400).json({
+            success: false,
+            message: 'Please provide a valid email address',
+          });
+        }
 
-        // Create user
-        const user: IUser = new User({
+        // Password length validation
+        if (password.length < 6) {
+          return res.status(400).json({
+            success: false,
+            message: 'Password must be at least 6 characters long',
+          });
+        }
+
+        // Check if the user already exists by email or username
+        const existingUser = await User.findOne({
+          $or: [{ email }, { username }],
+        });
+
+        if (existingUser) {
+          const field = existingUser.email === email ? 'Email' : 'Username';
+          return res.status(400).json({
+            success: false,
+            message: `${field} is already in use`,
+          });
+        }
+
+        // Hash the user's password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create a new user
+        const user = new User({
           username,
-          email,
+          email: email.toLowerCase(), // Ensure email is stored in lowercase
           password: hashedPassword,
         });
 
+        // Save the user to the database
         await user.save();
 
-        // Create JWT
-        const token = jwt.sign(
-          { userId: user._id, email: user.email },
-          process.env.JWT_SECRET || 'secret',
-          { expiresIn: '1h' }
-        );
+        // Type assertion for '_id' to explicitly state that it is a string
+        const userId = user._id.toString(); // Explicitly casting '_id' to 'string'
 
-        // Set cookie
-        res.setHeader(
-          'Set-Cookie',
-          cookie.serialize('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            maxAge: 3600, // 1 hour
-            sameSite: 'strict',
-            path: '/',
-          })
-        );
-
-        res.status(201).json({
+        // Return the newly created user details (without password)
+        return res.status(201).json({
           success: true,
           data: {
-            user: {
-              id: user._id,
-              username: user.username,
-              email: user.email,
-            },
+            id: userId,
+            username: user.username,
+            email: user.email,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
           },
         });
-      } catch (error: any) {
-        console.error(error);
-        res.status(400).json({ success: false, message: error.message });
+      } catch (error) {
+        console.error('Signup error:', error);
+        return res.status(500).json({
+          success: false,
+          message: 'Internal server error. Please try again later.',
+        });
       }
-      break;
+    }
+
+    // Handle unsupported HTTP methods
     default:
       res.setHeader('Allow', ['POST']);
-      res
-        .status(405)
-        .json({ success: false, message: `Method ${method} Not Allowed` });
-      break;
+      return res.status(405).json({
+        success: false,
+        message: `Method ${method} not allowed`,
+      });
   }
 }
