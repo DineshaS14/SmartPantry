@@ -1,4 +1,4 @@
-import mongoose, { Connection } from "mongoose";
+import mongoose from "mongoose";
 
 // Define an interface for the cached connection
 interface MongooseCache {
