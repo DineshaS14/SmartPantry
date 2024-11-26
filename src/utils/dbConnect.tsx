@@ -16,7 +16,7 @@ interface MongooseCache {
 }
 
 // Declare a global interface to prevent multiple instances of mongoose connection
-interface GlobalWithMongoose extends globalThis {
+interface GlobalWithMongoose extends NodeJS.Global {
   mongoose?: MongooseCache;
 }
 
