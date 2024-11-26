@@ -40,7 +40,7 @@ const GroqSearch: React.FC<GroqSearchProps> = ({ initialInventory = [] }) => {
         Dietary restrictions/preferences: ${searchQuery || 'None'}
         
         Please provide creative recipes that:
-        1. Primarily use the available ingredients
+        1. Use the available ingredients
         2. Are clear and concise
         3. Include a brief cooking method
         4. Consider any specified dietary restrictions
