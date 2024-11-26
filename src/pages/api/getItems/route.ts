@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiResponse } from 'next';
 import dbConnect from '../../../utils/dbConnect';
 import Item from '../../../models/itemModel';
 import { authenticate, AuthenticatedRequest } from '../../../middleware/auth';

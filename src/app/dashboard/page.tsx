@@ -121,7 +121,7 @@ const DashboardPage = () => {
 
         {/* Toggle Right Sidebar */}
         <button onClick={() => setToggleRight((previousValue) => !previousValue)}
-          className='bg-[#E38E49] text-white hover:bg-[#1F509A] px-3 py-2 rounded-md text-sm font-medium border-2 border-black'>
+          className='bg-[#E38E49] text-white hover:bg-[#1F509A]  px-3 py-2 rounded-md text-sm font-medium border-2 border-black'>
           <FiSidebar />
         </button>
       </div>
@@ -134,32 +134,29 @@ const DashboardPage = () => {
       )}
 
       {/* Main Container Section */}
-      <div className='flex flex-row'>
-        {/* Toggle Left Sidebar Section */}
-        {toggleLeft && (
-          <div className='w-1/6 bg-[#1F509A] p-6 h-full rounded-full transition-all duration-300 border-2 border-[#E38E49]'>
-            <TypeButtons onTypeSelect={handleTypeSelect} />
-          </div>
-        )}
+      <div className="flex flex-row w-full h-full space-x-2">
+  {/* Toggle Left Sidebar Section */}
+  <div className={`${toggleLeft ? 'block' : 'hidden'} w-1/6 bg-[#1F509A] p-10 h-[65v] rounded-3xl transition-all duration-300 border-2 border-[#E38E49]`}>
+    <TypeButtons onTypeSelect={handleTypeSelect} />
+  </div>
 
-        {/* Cards Section */}
-        <div className={`${toggleLeft ? 'w-5/6' : 'w-full'} transition-all duration-300`}>
-          {/* Grid to display cards */}
-          <div className="justify-center mx-auto grid px-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {filteredItems.map((item) => (
-              <Card key={item._id} item={item} onDelete={handleItemDelete} />
-            ))}
-          </div>
-        </div>
+  {/* Cards Section */}
+  <div className={`flex-grow w-full transition-all duration-300 ${toggleLeft ? 'ml-2' : 'ml-0'} ${toggleRight ? 'mr-2' : 'mr-0'}`}>
+    {/* Grid to display cards */}
+    <div className="justify-center mx-auto grid px-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {filteredItems.map((item) => (
+        <Card key={item._id} item={item} onDelete={handleItemDelete} />
+      ))}
+    </div>
+  </div>
 
-        {/* Toggle Right Sidebar Section */}
-        {toggleRight && (
-          <div className='w-1/6 bg-black ml-auto p-4 h-full'>
-            {/* Gemini Search Component */}
-            <GroqSearch initialInventory={inventory} />
-          </div>
-        )}
-      </div>
+  {/* Toggle Right Sidebar Section */}
+  <div className={`${toggleRight ? 'block' : 'hidden'} w-2/5 bg-[#1F509A] rounded-xl ml-auto p-4 h-full transition-all duration-300`}>
+    {/* Gemini Search Component */}
+    <GroqSearch initialInventory={inventory} />
+  </div>
+</div>
+
     </div>
   );
 };

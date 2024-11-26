@@ -110,8 +110,8 @@ const GroqSearch: React.FC<GroqSearchProps> = ({ initialInventory = [] }) => {
         </div>
       )}
 
-      {/* Recipes Display */}
-      <div className="p-4 border-2 border-gray-400 rounded-md max-h-64 overflow-y-auto">
+      {/* Recipes Display max-h-[75vh] h-[75vh] keeps it within the screen*/}
+      <div className="p-4 border-2 border-gray-400 rounded-md max-h-[75vh] h-[75vh] overflow-y-auto">
         <h3 className="text-lg font-semibold mb-3 text-[#0A3981]">Recipes:</h3>
         <ul className="list-disc pl-5">
           {recipes.length > 0 ? (
