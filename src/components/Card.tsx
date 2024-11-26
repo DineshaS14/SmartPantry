@@ -13,9 +13,10 @@ interface CardProps {
     type?: string;
     expiryDate: string;
   };
+  onDelete: (id: string) => void;
 }
 
-const Card: React.FC<CardProps> = ({ item }) => {
+const Card: React.FC<CardProps> = ({ item, onDelete }) => {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -34,9 +35,8 @@ const Card: React.FC<CardProps> = ({ item }) => {
         throw new Error('Failed to delete item');
       }
 
-      // Optionally, refresh the page to remove the deleted item
-      router.refresh();
-      window.location.reload();
+      // Call onDelete to update state
+      onDelete(item._id);
     } catch (err) {
       console.error('Error deleting item:', err);
     } finally {
@@ -45,7 +45,7 @@ const Card: React.FC<CardProps> = ({ item }) => {
   };
 
   const handleUpdate = () => {
-    router.push(`/update-item/${item._id}`);
+    router.push(`/updateItem/${item._id}/`);
   };
 
   return (
