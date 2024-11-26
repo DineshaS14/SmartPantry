@@ -15,22 +15,19 @@ interface MongooseCache {
   promise: Promise<typeof mongoose> | null; // Cached promise for connecting to the database
 }
 
-// Declare a global interface to prevent multiple instances of mongoose connection
-interface GlobalWithMongoose extends NodeJS.Global {
-  mongoose?: MongooseCache;
+// Extend the global interface
+declare global {
+  var mongoose?: MongooseCache;
 }
 
-// Get the global object with TypeScript type safety
-const globalWithMongoose = global as GlobalWithMongoose;
-
 // Initialize or reuse the global cache
-const cached: MongooseCache = globalWithMongoose.mongoose || { 
+const cached: MongooseCache = global.mongoose || { 
   conn: null, 
   promise: null 
 };
 
 // Assign `cached` back to `global.mongoose` to ensure it's available across hot-reloads
-globalWithMongoose.mongoose = cached;
+global.mongoose = cached;
 
 // Main function to handle the mongoose connection
 async function dbConnect(): Promise<typeof mongoose> {
