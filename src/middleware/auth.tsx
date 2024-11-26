@@ -8,7 +8,7 @@ export interface AuthenticatedRequest extends NextApiRequest {
 }
 
 // Middleware to authenticate the user by checking for a JWT token in the request cookies
-export const authenticate = (
+export const authenticate = async (
   req: AuthenticatedRequest,
   res: NextApiResponse,
   next: () => void

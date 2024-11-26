@@ -1,7 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import User from '../../../models/User'; // Adjust the import path as needed
 import dbConnect from '../../../utils/dbConnect';
+import * as cookie from 'cookie';
 
 interface SignupRequest extends NextApiRequest {
   body: {
@@ -89,7 +91,30 @@ export default async function handler(
         await user.save();
 
         // Type assertion for '_id' to explicitly state that it is a string
-        const userId = user._id.toString(); // Explicitly casting '_id' to 'string'
+        const userId = user._id.toString();
+
+        // Generate JWT token
+        const token = jwt.sign(
+          {
+            userId: userId,
+            email: user.email,
+            username: user.username,
+          },
+          process.env.JWT_SECRET || 'secret',
+          { expiresIn: '1h' }
+        );
+
+        // Set the JWT token as an HTTP-only cookie
+        res.setHeader(
+          'Set-Cookie',
+          cookie.serialize('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', // Use secure cookie only in production
+            maxAge: 3600, // 1 hour expiration time
+            sameSite: 'strict', // CSRF protection
+            path: '/',
+          })
+        );
 
         // Return the newly created user details (without password)
         return res.status(201).json({

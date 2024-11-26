@@ -41,14 +41,7 @@ const Header = () => {
             </Link>
             {authContext?.isLoggedIn ? (
               <>
-                <Link
-                  href="/add-food"
-                  className="bg-[#E38E49] text-white hover:bg-[#1F509A] px-3 py-2 rounded-md text-sm font-medium border-2 border-black"
-                >
-                  <span className="drop-shadow-[0_0px_5px_rgba(0,0,0,1)]">
-                    Add an Item
-                  </span>
-                </Link>
+               
                 <span className="text-white px-3 py-2 text-sm font-medium">
                   Hello, {authContext.user?.username}
                 </span>

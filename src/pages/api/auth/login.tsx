@@ -1,13 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import User from '../../../models/User'; // Adjust the import path as needed
+import User from '../../../models/User';
 import dbConnect from '../../../utils/dbConnect';
+import * as cookie from 'cookie';
 
 interface LoginResponse {
   success: boolean;
   message?: string;
-  token?: string;
   user?: {
     id: string;
     username: string;
@@ -65,10 +65,21 @@ export default async function handler(
           { expiresIn: '1h' }
         );
 
-        // Return success response, token, and user info
+        // Set the JWT token as an HTTP-only cookie
+        res.setHeader(
+          'Set-Cookie',
+          cookie.serialize('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 3600, // 1 hour expiration time
+            sameSite: 'strict',
+            path: '/',
+          })
+        );
+
+        // Return success response, including user info (no token in response)
         return res.status(200).json({
           success: true,
-          token,
           user: {
             id: user._id.toString(),
             username: user.username,
