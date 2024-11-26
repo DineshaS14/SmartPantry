@@ -14,7 +14,7 @@ interface GroqSearchProps {
 
 const GroqSearch: React.FC<GroqSearchProps> = ({ initialInventory = [] }) => {
   // State Management
-  const [inventory, setInventory] = useState<string[]>(initialInventory);
+  const [ inventory ] = useState<string[]>(initialInventory);
   const [searchQuery, setSearchQuery] = useState('');
   const [recipes, setRecipes] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
