@@ -141,7 +141,7 @@ const DashboardPage = () => {
   </div>
 
   {/* Cards Section */}
-  <div className={`flex-grow w-full transition-all duration-300 ${toggleLeft ? 'ml-2' : 'ml-0'} ${toggleRight ? 'mr-2' : 'mr-0'}`}>
+  <div className={`h-[65v] flex-grow w-full transition-all duration-300 ${toggleLeft ? 'ml-2' : 'ml-0'} ${toggleRight ? 'mr-2' : 'mr-0'}`}>
     {/* Grid to display cards */}
     <div className="justify-center mx-auto grid px-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {filteredItems.map((item) => (
