@@ -23,6 +23,8 @@ const ProtectedRoute: React.FC<Props> = ({ children }) => {
       }
 
       const decoded = jwt.verify(token, process.env.NEXT_PUBLIC_JWT_SECRET || 'secret');
+      // Optionally, you can use the decoded token data here
+      console.log('Token decoded successfully:', decoded);
       setLoading(false);
     } catch (error) {
       console.error('Token verification failed:', error);
