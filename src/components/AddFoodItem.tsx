@@ -34,6 +34,15 @@ const AddFoodItem: React.FC = () => {
     }));
   };
 
+  // Separate change handler for select field
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      type: value,
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -154,19 +163,31 @@ const AddFoodItem: React.FC = () => {
           />
         </div>
 
-        {/* Type Field */}
+        {/* Type Field - Dropdown */}
         <div>
           <label htmlFor="type" className="block text-white mb-1">
-            Type
+            Type <span className="text-red-500">*</span>
           </label>
-          <input
-            type="text"
+          <select
             id="type"
-            placeholder="Enter type or category"
             value={formData.type}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-[#E38E49] rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F509A]"
-          />
+            onChange={handleSelectChange}
+            required
+            className="w-full px-3 py-2 border border-[#E38E49] rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F509A] bg-white"
+          >
+            <option value="" disabled>
+              Select type or category
+            </option>
+            <option value="Vegetables">Vegetables</option>
+            <option value="Fruits">Fruits</option>
+            <option value="Dairy">Dairy</option>
+            <option value="Condiments">Condiments</option>
+            <option value="Frozen Food">Frozen Food</option>
+            <option value="Nuts & Seeds">Nuts & Seeds</option>
+            <option value="Berries">Berries</option>
+            <option value="Beans">Beans</option>
+            <option value="Legumes">Legumes</option>
+          </select>
         </div>
 
         {/* Expiry Date Field */}

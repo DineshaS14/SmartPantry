@@ -70,12 +70,21 @@ const UpdateItem: React.FC = () => {
     fetchItem();
   }, [id, isLoggedIn, router]);
 
-  // Handle input changes
+  // Handle input changes for text and number fields
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [id]: id === 'quantity' ? Number(value) : value,
+    }));
+  };
+
+  // Handle select change for dropdown
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      type: value,
     }));
   };
 
@@ -110,7 +119,7 @@ const UpdateItem: React.FC = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-[#0A3981] p-8 mt-10 rounded-lg shadow-lg border-2 border-[#E38E49]">
+    <div className="h-screen max-w-md mx-auto bg-[#0A3981] p-8 rounded-lg shadow-lg border-2 border-[#E38E49]">
       <h2 className="text-[#E38E49] text-2xl font-semibold italic mb-6 text-center drop-shadow-[0_5px_5px_rgba(0,0,0,1)]">
         Update Item
       </h2>
@@ -182,19 +191,31 @@ const UpdateItem: React.FC = () => {
           />
         </div>
 
-        {/* Type Field */}
+        {/* Type Field - Dropdown */}
         <div>
           <label htmlFor="type" className="block text-white mb-1">
-            Type
+            Type <span className="text-red-500">*</span>
           </label>
-          <input
-            type="text"
+          <select
             id="type"
-            placeholder="Enter type or category"
             value={formData.type}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-[#E38E49] rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F509A]"
-          />
+            onChange={handleSelectChange}
+            required
+            className="w-full px-3 py-2 border border-[#E38E49] rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F509A] bg-white"
+          >
+            <option value="" disabled>
+              Select type or category
+            </option>
+            <option value="Vegetables">Vegetables</option>
+            <option value="Fruits">Fruits</option>
+            <option value="Dairy">Dairy</option>
+            <option value="Condiments">Condiments</option>
+            <option value="Frozen Food">Frozen Food</option>
+            <option value="Nuts & Seeds">Nuts & Seeds</option>
+            <option value="Berries">Berries</option>
+            <option value="Beans">Beans</option>
+            <option value="Legumes">Legumes</option>
+          </select>
         </div>
 
         {/* Expiry Date Field */}
