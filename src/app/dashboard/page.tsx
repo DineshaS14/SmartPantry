@@ -21,7 +21,7 @@ const DashboardPage = () => {
   // State variables
   const [items, setItems] = useState<Item[]>([]); // Holds fetched items
   const [filteredItems, setFilteredItems] = useState<Item[]>([]); // Holds filtered items to be rendered
-  const [inventory, setInventory] = useState<string[]>([]); // Holds item titles for the GeminiSearch
+  const [inventory, setInventory] = useState<string[]>([]); // Holds item titles for the GroqSearch
   const [error, setError] = useState(''); // Holds error messages
   const [toggleLeft, setToggleLeft] = useState<boolean>(false); // Controls left sidebar visibility
   const [toggleRight, setToggleRight] = useState<boolean>(false); // Controls right sidebar visibility
@@ -99,7 +99,7 @@ const DashboardPage = () => {
 
         {/* Title and Search/Add Section */}
         <div className='flex flex-row space-x-2'>
-          <h1 className="text-3xl font-bold text-[#E38E49] text-center drop-shadow-[0_0px_2px_rgba(0,0,0,1)]">
+          <h1 className="text-3xl font-bold text-[#E38E49] text-center drop-shadow-[0_4px_2px_rgba(0,0,0,1)]">
             Dashboard
           </h1>
           <input
@@ -121,7 +121,7 @@ const DashboardPage = () => {
 
         {/* Toggle Right Sidebar */}
         <button onClick={() => setToggleRight((previousValue) => !previousValue)}
-          className='bg-[#E38E49] text-white hover:bg-[#1F509A]  px-3 py-2 rounded-md text-sm font-medium border-2 border-black'>
+          className='bg-[#E38E49] text-white hover:bg-[#1F509A] px-3 py-2 rounded-md text-sm font-medium border-2 border-black'>
           <FiSidebar />
         </button>
       </div>
@@ -135,27 +135,28 @@ const DashboardPage = () => {
 
       {/* Main Container Section */}
       <div className="flex flex-row w-full h-full space-x-2">
-  {/* Toggle Left Sidebar Section */}
-  <div className={`${toggleLeft ? 'block' : 'hidden'} w-1/6 bg-[#1F509A] p-10 h-[65v] rounded-3xl transition-all duration-300 border-2 border-[#E38E49]`}>
-    <TypeButtons onTypeSelect={handleTypeSelect} />
-  </div>
+        {/* Toggle Left Sidebar Section */}
+        <div className={`${toggleLeft ? 'block' : 'hidden'} w-1/6 bg-[#1F509A] p-10 h-[65vh] rounded-3xl transition-all duration-300 border-2 border-[#E38E49]`}>
+          <TypeButtons onTypeSelect={handleTypeSelect} />
+        </div>
 
-  {/* Cards Section */}
-  <div className={`h-[65v] flex-grow w-full transition-all duration-300 ${toggleLeft ? 'ml-2' : 'ml-0'} ${toggleRight ? 'mr-2' : 'mr-0'}`}>
-    {/* Grid to display cards */}
-    <div className="justify-center max-h-[700px] mx-auto grid px-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {filteredItems.map((item) => (
-        <Card key={item._id} item={item} onDelete={handleItemDelete} />
-      ))}
-    </div>
-  </div>
+        {/* Cards Section */}
+        <div className={`h-[75vh] flex-grow w-full transition-all duration-300 ${toggleLeft ? 'ml-2' : 'ml-0'} ${toggleRight ? 'mr-2' : 'mr-0'}`}>
+          {/* Grid to display cards */}
+          <div className="border-2 border-[#E38E49] p-3 rounded-lg justify-center max-h-[75vh] mx-auto grid px-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto">
+            {/* Added `overflow-y-auto` to make the card section scrollable if there are many cards */}
+            {filteredItems.map((item) => (
+              <Card key={item._id} item={item} onDelete={handleItemDelete} />
+            ))}
+          </div>
+        </div>
 
-  {/* Toggle Right Sidebar Section */}
-  <div className={`${toggleRight ? 'block' : 'hidden'} w-2/5 bg-[#1F509A] rounded-xl ml-auto p-4 h-full transition-all duration-300`}>
-    {/* Gemini Search Component */}
-    <GroqSearch initialInventory={inventory} />
-  </div>
-</div>
+        {/* Toggle Right Sidebar Section */}
+        <div className={`${toggleRight ? 'block' : 'hidden'} w-2/5 bg-[#1F509A] rounded-xl ml-auto p-4 h-full transition-all duration-300`}>
+          {/* Gemini Search Component */}
+          <GroqSearch initialInventory={inventory} />
+        </div>
+      </div>
 
     </div>
   );

@@ -76,7 +76,7 @@ const Card: React.FC<CardProps> = ({ item, onDelete }) => {
           onClick={handleDelete}
           disabled={isDeleting}
           className={`${
-            isDeleting ? 'bg-gray-400 cursor-not-allowed' : 'hover:bg-red-700 drop-shadow-[0_5px_2px_rgba(0,0,0,1)] bg-[#E38E49]'
+            isDeleting ? 'bg-gray-400 cursor-not-allowed' : 'hover:bg-red-700 drop-shadow-[0_5px_2px_rgba(0,0,0,1)] border-2 border-red-900 bg-[#E38E49]'
           } text-red-900 px-3 py-1 rounded-md text-sm font-medium`}
         >
           {isDeleting ? 'Deleting...' : 'Delete'}
