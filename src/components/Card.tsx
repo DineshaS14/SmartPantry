@@ -49,7 +49,7 @@ const Card: React.FC<CardProps> = ({ item, onDelete }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg border-2 border-[#E38E49] p-4 flex flex-col items-start">
+    <div className="bg-white rounded-lg shadow-lg border-2 border-[#E38E49] p-4 flex flex-col overflow-y-auto items-start">
       {item.url && (
         <img
           src={item.url}
