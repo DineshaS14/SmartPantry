@@ -114,7 +114,7 @@ const DashboardPage = () => {
           onClick={() => setToggleLeft((prev) => !prev)} // Toggle left sidebar state
           className="bg-[#E38E49] text-white hover:bg-[#1F509A] flex flex-row px-3 py-2 rounded-md text-sm justify-center items-center font-medium border-2 border-black w-full sm:w-auto md:w-auto lg:w-auto"
         >
-          <FiSidebar /> {!toggleLeft && (<span className='font-medium px-2 drop-shadow-[0_4px_2px_rgba(0,0,0,1)]'>Filter's Buttons</span>)}{/* Sidebar icon */}
+          <FiSidebar /> {!toggleLeft && (<span className='font-medium px-2 drop-shadow-[0_4px_2px_rgba(0,0,0,1)]'>Filter Buttons</span>)}{/* Sidebar icon */}
         </button>
 
         {/* Title and Search/Add Section */}
