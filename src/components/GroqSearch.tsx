@@ -1,15 +1,4 @@
 import React, { useState } from 'react';
-import Groq from 'groq-sdk';
-
-// Fetch the Groq API key from environment variables
-const groqAPI = process.env.NEXT_PUBLIC_GROQ_API_KEY;
-
-// Initialize Groq client
-// IMPORTANT: In a production app, API calls should be moved to a secure backend to avoid exposing the API key
-const groq = new Groq({
-  apiKey: groqAPI, // API key for authenticating with the Groq API
-  dangerouslyAllowBrowser: true, // Use with caution; exposes API key in client code
-});
 
 // Props interface for the GroqSearch component
 interface GroqSearchProps {
@@ -37,7 +26,7 @@ const GroqSearch: React.FC<GroqSearchProps> = ({ initialInventory = [] }) => {
     setSearchQuery(e.target.value); // Update state with user input
   };
 
-  // Handler for search button click, integrates with the Groq API
+  // Handler for search button click, integrates with the API route
   const handleSearch = async () => {
     // Reset error, loading, and recipe states for a fresh search
     setError(null);
@@ -45,47 +34,29 @@ const GroqSearch: React.FC<GroqSearchProps> = ({ initialInventory = [] }) => {
     setRecipes([]);
 
     try {
-      // Constructing a detailed prompt for the Groq API to generate creative recipes
-      const chatPrompt = `
-        Act as a professional chef creating recipes for a smart pantry app.
-        Ingredients available: ${inventory.join(', ')}
-        Dietary restrictions/preferences: ${searchQuery || 'None'}
-        
-        Please provide creative recipes that:
-        1. Use the available ingredients
-        2. Are clear and concise
-        3. Include a brief cooking method
-        4. Consider any specified dietary restrictions
-        
-        Generate 3 unique recipe suggestions.
-      `;
-
-      // Use Groq API to get recipe suggestions
-      const chatCompletion = await groq.chat.completions.create({
-        messages: [
-          { 
-            role: 'user', // Specifies that the message is coming from the user
-            content: chatPrompt // The prompt that we want to generate recipes for
-          }
-        ],
-        model: 'llama3-8b-8192', // Specifies which Groq model to use
-        max_tokens: 500, // Limit the number of tokens in the response
+      // Call the backend API route to generate recipes
+      const response = await fetch('/api/getRecipes/route', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          inventory,
+          searchQuery,
+        }),
       });
 
-      // Extracting the response content from the API
-      const responseContent = chatCompletion.choices[0]?.message?.content || 'No recipes found.';
+      if (!response.ok) {
+        throw new Error('Failed to generate recipes');
+      }
 
-      // Processing the response to create an array of recipes
-      const generatedRecipes = responseContent
-        .split('\n') // Splitting the response by new lines
-        .filter(recipe => recipe.trim() !== ''); // Removing any empty lines
-
-      setRecipes(generatedRecipes); // Update state with the list of recipes
+      const data = await response.json();
+      setRecipes(data.recipes);
     } catch (err) {
-      console.error("Error generating recipes:", err); // Log the error to the console
-      setError('Failed to generate recipes. Please try again.'); // Display a user-friendly error message
+      console.error('Error generating recipes:', err);
+      setError('Failed to generate recipes. Please try again.');
     } finally {
-      setLoading(false); // Stop the loading indicator, whether the request was successful or not
+      setLoading(false);
     }
   };
 
@@ -101,7 +72,7 @@ const GroqSearch: React.FC<GroqSearchProps> = ({ initialInventory = [] }) => {
           onChange={handleInputChange} // Update query state on input change
           className="w-full md:w-2/3 p-3 border-2 border-black rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F509A]"
         />
-        
+
         {/* Search Button */}
         <button
           onClick={handleSearch} // Trigger handleSearch when clicked
@@ -138,7 +109,6 @@ const GroqSearch: React.FC<GroqSearchProps> = ({ initialInventory = [] }) => {
             ))
           ) : (
             <li className="text-gray-700">No recipes found.</li>
-             
           )}
         </ul>
       </div>
