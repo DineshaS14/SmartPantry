@@ -28,7 +28,7 @@ const TypeButtons: React.FC<TypeButtonsProps> = ({ onTypeSelect }) => {
   return (
     // The main container div for the buttons.
     // It uses flex to lay out the buttons with wrapping enabled, so they will move to the next line when needed.
-    <div className="p-4 gap-2 mb-4 space-x-1 space-y-1 ">
+    <div className="p-4 gap-2 mb-4 space-x-1 space-y-1 border-2 rounded-lg border-[#E38E49]">
       {/* Iterate over the 'types' array and create a button for each type */}
       {types.map((type) => (
         <button

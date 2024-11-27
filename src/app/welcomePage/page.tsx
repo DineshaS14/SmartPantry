@@ -4,7 +4,8 @@ export default function WelcomePage() {
     return (
         <>
         <div className="flex flex-col justify-center font-bold bg-[#D4EBF8] text-black text-center h-screen">
-            <h1 className='drop-shadow-[0_5px_2px_rgba(0,0,0,1)] text-[#E38E49] italic font-extrabold text-9xl mb-10'>
+            <h1 className='drop-shadow-[0_5px_2px_rgba(0,0,0,1)] text-[#E38E49] italic font-extrabold mb-10 
+            text-4xl sm:text-6xl md:text-7xl lg:text-9xl'>
                 SmartPantry
             </h1>
             <div className='flex flex-row justify-center space-x-1 '>

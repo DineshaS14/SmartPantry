@@ -61,7 +61,7 @@ const GroqSearch: React.FC<GroqSearchProps> = ({ initialInventory = [] }) => {
   };
 
   return (
-    <div className="p-6 mb-8 bg-white shadow-lg rounded-lg border-2 border-[#E38E49]">
+    <div className="p-6 mb-8 bg-white shadow-lg rounded-lg border-2 overflow-y-scroll border-[#E38E49]">
       {/* Search Input and Button */}
       <div className="flex flex-col md:flex-row items-center gap-4 mb-6">
         {/* Input field for dietary restrictions or preferences */}
@@ -98,7 +98,7 @@ const GroqSearch: React.FC<GroqSearchProps> = ({ initialInventory = [] }) => {
       )}
 
       {/* Recipes Display */}
-      <div className="p-4 border-2 border-gray-400 rounded-md max-h-[75vh] h-[75vh] overflow-y-auto">
+      <div className="p-4 border-2 border-gray-400 rounded-md max-h-[75vh] h-[75vh] overflow-auto">
         <h3 className="text-lg font-semibold mb-3 text-[#0A3981]">Recipes:</h3>
         <ul className="list-disc pl-5">
           {recipes.length > 0 ? (
